@@ -1,0 +1,45 @@
+# Auto fly swatter
+# Hunter Montalvo 
+# Uses ultrasonic sensor to activate LED (eventually motor) for fly swatter
+# 6/8/2023
+
+
+import RPi.GPIO as GPIO
+from time import *
+
+# set up stuff
+GPIO.setmode(GPIO.BCM)
+
+led_10 = 17 # output
+GPIO.setup(led_10, GPIO.OUT)
+
+TrigPin = 18 # output
+GPIO.setup (TrigPin, GPIO.OUT)
+
+EchoPin = 27 # input
+GPIO.setup (EchoPin, GPIO.IN)
+
+TRIGGER_TIME = 0.1
+
+# turn off leds before starting
+GPIO.output(led_10, GPIO.LOW)
+
+while (True):
+  
+    # trigger the sensor by setting it high for a short time and then setting it low
+    GPIO.output (TrigPin, GPIO.HIGH)
+    sleep(TRIGGER_TIME)
+    GPIO.output (TrigPin, GPIO.LOW)
+    # wait for the soundwave to return to the sensor
+    while(GPIO.input (EchoPin) == GPIO.LOW):
+        start = time()
+    while (GPIO.input(EchoPin) == GPIO.HIGH):
+        end = time()
+    
+    distance = ((end - start)/2) * 34300 # disance = half duration * speed of sound (in cm)
+    
+    if 17 < distance < 25: # if between 17 and 25 cm
+        GPIO.output(led_10, GPIO.HIGH) # turn on led_10
+    else: # not within 10
+        GPIO.output(led_10, GPIO.LOW) # turn off led_10
+        
