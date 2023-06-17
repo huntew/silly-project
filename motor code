@@ -1,0 +1,77 @@
+from time import sleep
+
+def setGPIO():
+  steps = [ 12, 6, 5, 4 ] 
+  GPIO.setup(steps, GPIO.OUT)
+  return steps
+        
+def motor(direction, num_of_steps, steps):
+  times = 0
+  while direction == 'forward':
+    while times < num_of_steps:
+    
+      # step 1
+      GPIO.output(steps[0], GPIO.HIGH)
+      GPIO.output(steps[1], GPIO.LOW)
+      GPIO.output(steps[2], GPIO.LOW)
+      GPIO.output(steps[3], GPIO.LOW)
+      sleep (0.002) # minimum wait time between steps
+      
+      # step 2
+      GPIO.output(steps[0], GPIO.LOW)
+      GPIO.output(steps[1], GPIO.HIGH)
+      GPIO.output(steps[2], GPIO.LOW)
+      GPIO.output(steps[3], GPIO.LOW)
+      sleep (0.002) # minimum wait time between steps
+      
+      # step 3
+      GPIO.output(steps[0], GPIO.LOW)
+      GPIO.output(steps[1], GPIO.LOW)
+      GPIO.output(steps[2], GPIO.HIGH)
+      GPIO.output(steps[3], GPIO.LOW)
+      sleep (0.002) # minimum wait time between steps
+      
+      # step 4
+      GPIO.output(steps[0], GPIO.LOW)
+      GPIO.output(steps[1], GPIO.LOW)
+      GPIO.output(steps[2], GPIO.LOW)
+      GPIO.output(steps[3], GPIO.HIGH)
+      sleep (0.002) # minimum wait time between steps
+      
+      times += 1
+        
+    reverse_times = 0
+    while reverse < num_of_steps:
+      
+      # step 4
+      GPIO.output(steps[0], GPIO.LOW)
+      GPIO.output(steps[1], GPIO.LOW)
+      GPIO.output(steps[2], GPIO.LOW)
+      GPIO.output(steps[3], GPIO.HIGH)
+      sleep (0.002) # minimum wait time between steps
+      
+      # step 3
+      GPIO.output(steps[0], GPIO.LOW)
+      GPIO.output(steps[1], GPIO.LOW)
+      GPIO.output(steps[2], GPIO.HIGH)
+      GPIO.output(steps[3], GPIO.LOW)
+      sleep (0.002) # minimum wait time between steps
+      
+      # step 2
+      GPIO.output(steps[0], GPIO.LOW)
+      GPIO.output(steps[1], GPIO.HIGH)
+      GPIO.output(steps[2], GPIO.LOW)
+      GPIO.output(steps[3], GPIO.LOW)
+      sleep (0.002) # minimum wait time between steps
+      
+      # step 1
+      GPIO.output(steps[0], GPIO.HIGH)
+      GPIO.output(steps[1], GPIO.LOW)
+      GPIO.output(steps[2], GPIO.LOW)
+      GPIO.output(steps[3], GPIO.LOW)
+      sleep (0.002) # minimum wait time between steps
+      
+      reverse_times += 1
+      
+steps = setGPIO()
+motor ('forward', 50, steps)
