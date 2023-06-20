@@ -1,0 +1,58 @@
+from time import sleep
+import RPi.GPIO as GPIO
+
+
+GPIO.setmode(GPIO.BCM)
+
+# Motor pins
+motor_steps = [12, 6, 5, 4]
+GPIO.setup(motor_steps, GPIO.OUT)
+
+# Ultrasonic sensor pins
+led_10 = 17  # output
+GPIO.setup(led_10, GPIO.OUT)
+TrigPin = 18  # output
+GPIO.setup(TrigPin, GPIO.OUT)
+EchoPin = 27  # input
+GPIO.setup(EchoPin, GPIO.IN)
+
+def rotate_motor(direction, num_of_steps, sleep_time):
+    times = 0
+    sleep_time *= 0.001
+
+    while times < num_of_steps:
+        for i in range(4):
+            for j in range(4):
+                if j == i:
+                    GPIO.output(motor_steps[j], GPIO.HIGH)
+                else:
+                    GPIO.output(motor_steps[j], GPIO.LOW)
+            sleep(sleep_time)  
+        times += 1
+
+    GPIO.output(motor_steps, GPIO.LOW)
+    
+    
+def detect_fly():
+    TRIGGER_TIME = 0.1
+
+    while True:
+        GPIO.output(TrigPin, GPIO.HIGH)
+        sleep(TRIGGER_TIME)
+        GPIO.output(TrigPin, GPIO.LOW)
+
+        while GPIO.input(EchoPin) == GPIO.LOW:
+            start = time()
+        while GPIO.input(EchoPin) == GPIO.HIGH:
+            end = time()
+
+        distance = ((end - start) / 2) * 34300
+
+        if 17 < distance < 25:
+            rotate_motor('forward', 600, 2.5)
+        else:
+            GPIO.output(led_10, GPIO.LOW)
+
+detect_fly()
+
+
