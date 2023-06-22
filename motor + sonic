@@ -1,4 +1,4 @@
-from time import sleep
+from time import *
 import RPi.GPIO as GPIO
 
 
@@ -21,14 +21,25 @@ def rotate_motor(direction, num_of_steps, sleep_time):
     sleep_time *= 0.001
 
     while times < num_of_steps:
-        for i in range(4):
-            for j in range(4):
-                if j == i:
-                    GPIO.output(motor_steps[j], GPIO.HIGH)
-                else:
-                    GPIO.output(motor_steps[j], GPIO.LOW)
-            sleep(sleep_time)  
-        times += 1
+        if direction == 'forward':
+            for i in range(4):
+                for j in range(4):
+                    if j == i:
+                        GPIO.output(motor_steps[j], GPIO.HIGH)
+                        times += 1
+                    else:
+                        GPIO.output(motor_steps[j], GPIO.LOW)
+                sleep(sleep_time)  
+        else: # if its back
+            backwards = [3, 2, 1, 0] # list to count backwards
+            for i in backwards:
+                for j in backwards:
+                    if j == i:
+                        GPIO.output(motor_steps[j], GPIO.HIGH)
+                        times += 1 
+                    else:
+                        GPIO.output(motor_steps[j], GPIO.LOW)
+                sleep(sleep_time)  
 
     GPIO.output(motor_steps, GPIO.LOW)
     
@@ -49,7 +60,10 @@ def detect_fly():
         distance = ((end - start) / 2) * 34300
 
         if 17 < distance < 25:
-            rotate_motor('forward', 600, 2.5)
+            GPIO.output(led_10, GPIO.HIGH)
+            rotate_motor('forward', 300, 2.5)
+            sleep(0.2)
+            rotate_motor('back', 300, 2.5)
         else:
             GPIO.output(led_10, GPIO.LOW)
 
