@@ -21,7 +21,7 @@ def rotate_motor(direction, num_of_steps, sleep_time):
     sleep_time *= 0.001
 
     while times < num_of_steps:
-        if direction == 'forward':
+        if direction == 'back':
             for i in range(4):
                 for j in range(4):
                     if j == i:
@@ -30,7 +30,7 @@ def rotate_motor(direction, num_of_steps, sleep_time):
                     else:
                         GPIO.output(motor_steps[j], GPIO.LOW)
                 sleep(sleep_time)  
-        else: # if its back
+        else: # if its back # this changed bc of the way we set it up, this is actually forwards now
             backwards = [3, 2, 1, 0] # list to count backwards
             for i in backwards:
                 for j in backwards:
@@ -63,7 +63,7 @@ def detect_fly():
             GPIO.output(led_10, GPIO.HIGH)
             rotate_motor('forward', 300, 2.5)
             sleep(0.2)
-            rotate_motor('back', 300, 2.5)
+            rotate_motor('back', 500, 2.5)
         else:
             GPIO.output(led_10, GPIO.LOW)
 
